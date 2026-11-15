@@ -14,16 +14,17 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.ReflectiveOperationException;
 import java.net.URL;
 
 public class WindowRouter{
-    private static final String resourceRoot = "/cr/ac/una/est/estructurasdedatosproyecto03/ui/";
+    private static final String resourceRoot =
+        "/cr/ac/una/est/estructurasdedatosproyecto03/ui/";
     private final Stage primaryStage;
     private final ApplicationContext applicationContext;
     private final AlertPresenter alertPresenter;
 
-    // Keep the main window and shared application services available for screen navigation.
+    // Keep the primary window and shared services available for navigation and controller creation.
     // Inputs: primary JavaFX stage and application context; output: a ready view router.
     public WindowRouter (Stage primaryStage, ApplicationContext applicationContext){
         if (primaryStage == null){
@@ -38,32 +39,32 @@ public class WindowRouter{
         this.alertPresenter = new AlertPresenter();
     }
 
-    // Open the sign-in view so the user can authenticate before accessing the social network.
-    // Output: none; the sign-in view is shown when its FXML resource is available.
+    // Open the sign-in view so the user can authenticate before using the application.
+    // Output: the sign-in view is shown when its FXML resource is available.
     public void showSignIn (){
         loadView(resourceRoot + "signin/sign-in-view.fxml", "Social UNA | Iniciar sesión");
     }
 
     // Open the registration view so a new student can create an account.
-    // Output: none; the registration view is shown when its FXML resource is available.
+    // Output: the registration view is shown when its FXML resource is available.
     public void showSignUp (){
         loadView(resourceRoot + "signup/sign-up-view.fxml", "Social UNA | Crear cuenta");
     }
 
     // Open the timeline view so the signed-in student can read and publish posts.
-    // Output: none; the timeline view is shown when its FXML resource is available.
+    // Output: the timeline view is shown when its FXML resource is available.
     public void showTimeline (){
         loadView(resourceRoot + "timeline/timeline-view.fxml", "Social UNA | Inicio");
     }
 
-    // Open the people view so the signed-in student can search and manage connections.
-    // Output: none; the people view is shown when its FXML resource is available.
+    // Open the people view so the signed-in student can search for and connect with others.
+    // Output: the people view is shown when its FXML resource is available.
     public void showPeople (){
         loadView(resourceRoot + "people/people-view.fxml", "Social UNA | Personas");
     }
 
-    // Load one FXML screen and apply the shared stylesheet without rebuilding the primary stage.
-    // Inputs: FXML resource path and window title; output: none, the stage changes to that screen or shows an error.
+    // Load one FXML screen and apply the shared stylesheet to its scene.
+    // Inputs: FXML resource path and Spanish window title; output: the stage changes view or displays an error.
     private void loadView (String fxmlPath, String windowTitle){
         URL viewResource = SocialCampusApplication.class.getResource(fxmlPath);
 
@@ -80,7 +81,7 @@ public class WindowRouter{
             Scene scene = new Scene(root);
 
             URL styleResource = SocialCampusApplication.class.getResource(
-                resourceRoot + "styles/social-una.css"
+                "/cr/ac/una/est/estructurasdedatosproyecto03/social-una.css"
             );
 
             if (styleResource != null){
@@ -95,7 +96,7 @@ public class WindowRouter{
         }
     }
 
-    // Create each screen controller with the shared services it needs for its user actions.
+    // Create each screen controller with the services it needs for its user actions.
     // Inputs: requested controller type; output: an initialized controller or an exception for an unsupported type.
     private Object createController (Class<?> controllerType){
         if (controllerType == SignInController.class){
@@ -152,12 +153,14 @@ public class WindowRouter{
                 controllerType,
                 new Class<?>[]{
                     cr.ac.una.est.estructurasdedatosproyecto03.service.TimelineService.class,
+                    cr.ac.una.est.estructurasdedatosproyecto03.service.PeopleService.class,
                     cr.ac.una.est.estructurasdedatosproyecto03.session.AccessSession.class,
                     WindowRouter.class,
                     AlertPresenter.class
                 },
                 new Object[]{
                     applicationContext.getTimelineService(),
+                    applicationContext.getPeopleService(),
                     applicationContext.getAccessSession(),
                     this,
                     alertPresenter
@@ -170,7 +173,7 @@ public class WindowRouter{
         );
     }
 
-    // Invoke the planned public controller constructor so the router does not depend on unfinished controller code yet.
+    // Invoke the matching public constructor so controllers receive shared service instances.
     // Inputs: controller type, constructor parameter types, and constructor values; output: the constructed controller.
     private Object instantiateController (
         Class<?> controllerType,
@@ -180,10 +183,9 @@ public class WindowRouter{
         try{
             Constructor<?> constructor = controllerType.getConstructor(parameterTypes);
             return constructor.newInstance(arguments);
-        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException
-            | InvocationTargetException exception){
+        } catch (ReflectiveOperationException exception){
             throw new IllegalStateException(
-                "The controller constructor is not ready: " + controllerType.getSimpleName(),
+                "No se pudo crear el controlador: " + controllerType.getSimpleName(),
                 exception
             );
         }
