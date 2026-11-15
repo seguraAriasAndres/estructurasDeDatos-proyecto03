@@ -39,32 +39,28 @@ public class WindowRouter{
         this.alertPresenter = new AlertPresenter();
     }
 
-    // Open the sign-in view so the user can authenticate before using the application.
-    // Output: the sign-in view is shown when its FXML resource is available.
+    // Open the sign-in view.
     public void showSignIn (){
         loadView(resourceRoot + "signin/sign-in-view.fxml", "Social UNA | Iniciar sesión");
     }
 
-    // Open the registration view so a new student can create an account.
-    // Output: the registration view is shown when its FXML resource is available.
+    // Open the registration view.
     public void showSignUp (){
         loadView(resourceRoot + "signup/sign-up-view.fxml", "Social UNA | Crear cuenta");
     }
 
-    // Open the timeline view so the signed-in student can read and publish posts.
-    // Output: the timeline view is shown when its FXML resource is available.
+    // Open the timeline view.
     public void showTimeline (){
         loadView(resourceRoot + "timeline/timeline-view.fxml", "Social UNA | Inicio");
     }
 
-    // Open the people view so the signed-in student can search for and connect with others.
-    // Output: the people view is shown when its FXML resource is available.
+    // Open the people view.
     public void showPeople (){
         loadView(resourceRoot + "people/people-view.fxml", "Social UNA | Personas");
     }
 
     // Load one FXML screen and apply the shared stylesheet to its scene.
-    // Inputs: FXML resource path and Spanish window title; output: the stage changes view or displays an error.
+    // Inputs: FXML resource path and window title; output: the stage changes view or displays an error.
     private void loadView (String fxmlPath, String windowTitle){
         URL viewResource = SocialCampusApplication.class.getResource(fxmlPath);
 
