@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+
+<StackPane xmlns="http://javafx.com/javafx/21"
+           xmlns:fx="http://javafx.com/fxml/1"
+           fx:controller="cr.ac.una.est.estructurasdedatosproyecto03.ui.screen.signup.SignUpController"
+           prefWidth="1000.0"
+           prefHeight="760.0"
+           styleClass="page-root">
+    <children>
+        <VBox maxWidth="460.0"
+              spacing="15.0"
+              styleClass="surface-card">
+            <padding>
+                <Insets top="28.0" right="32.0" bottom="28.0" left="32.0"/>
+            </padding>
+            <children>
+                <Label text="Social UNA" styleClass="brand-mark"/>
+                <Label text="Únete a la comunidad estudiantil"
+                       wrapText="true"
+                       styleClass="muted-text"/>
+                <Label text="Crear cuenta" styleClass="page-title"/>
+
+                <VBox spacing="7.0">
+                    <Label text="Nombre completo"/>
+                    <TextField fx:id="fullNameField" promptText="Tu nombre y apellidos"/>
+                </VBox>
+
+                <VBox spacing="7.0">
+                    <Label text="Usuario"/>
+                    <TextField fx:id="usernameField" promptText="Elige un nombre de usuario"/>
+                </VBox>
+
+                <VBox spacing="7.0">
+                    <Label text="Contraseña"/>
+                    <PasswordField fx:id="passwordField" promptText="Mínimo 8 caracteres"/>
+                </VBox>
+
+                <VBox spacing="7.0">
+                    <Label text="Confirmar contraseña"/>
+                    <PasswordField fx:id="confirmationField"
+                                   promptText="Escribe la contraseña otra vez"
+                                   onAction="#handleRegister"/>
+                </VBox>
+
+                <Label fx:id="feedbackLabel"
+                       wrapText="true"
+                       styleClass="validation-error"/>
+
+                <Button text="Crear cuenta"
+                        maxWidth="Infinity"
+                        styleClass="button-primary"
+                        onAction="#handleRegister"/>
+
+                <HBox alignment="CENTER" spacing="5.0">
+                    <children>
+                        <Label text="¿Ya tienes cuenta?" styleClass="muted-text"/>
+                        <Hyperlink text="Iniciar sesión"
+                                   styleClass="text-link"
+                                   onAction="#returnToSignIn"/>
+                    </children>
+                </HBox>
+            </children>
+        </VBox>
+    </children>
+</StackPane>
