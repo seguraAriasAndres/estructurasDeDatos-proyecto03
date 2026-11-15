@@ -1,0 +1,382 @@
+.root {
+    app-canvas: #FFFBF5;
+    app-surface: #FFFFFF;
+    app-crimson: #C8102E;
+    app-crimson-hover: #A90D27;
+    app-crimson-soft: #FCECEF;
+    app-text: #1A1A1B;
+    app-muted: #64748B;
+    app-border: #E5E0D8;
+    app-border-strong: #D4CCC0;
+    app-input: #FFFFFF;
+    app-focus-glow: rgba(200, 16, 46, 0.14);
+
+    -fx-base: app-surface;
+    -fx-background: app-canvas;
+    -fx-control-inner-background: app-surface;
+    -fx-control-inner-background-alt: app-surface;
+    -fx-accent: app-crimson;
+    -fx-focus-color: app-crimson;
+    -fx-faint-focus-color: app-focus-glow;
+    -fx-background-color: app-canvas;
+    -fx-font-family: "Segoe UI";
+    -fx-font-size: 14px;
+}
+
+/* Main layout surfaces */
+
+.page-root,
+.app-shell {
+    -fx-background-color: app-canvas;
+}
+
+.app-header,
+.sidebar,
+.surface-card {
+    -fx-background-color: app-surface;
+    -fx-border-color: app-border;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.surface-card,
+.card {
+    -fx-background-color: app-surface;
+    -fx-background-radius: 8px;
+    -fx-border-color: app-border;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+    -fx-padding: 16px;
+}
+
+.brand-mark {
+    -fx-text-fill: app-crimson;
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+}
+
+.page-title {
+    -fx-text-fill: app-text;
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+}
+
+.section-title {
+    -fx-text-fill: app-text;
+    -fx-font-size: 17px;
+    -fx-font-weight: bold;
+}
+
+.muted-text,
+.post-meta,
+.timestamp {
+    -fx-text-fill: app-muted;
+    -fx-font-size: 12px;
+}
+
+.text-link {
+    -fx-text-fill: app-crimson;
+    -fx-underline: false;
+}
+
+/* Buttons */
+
+.button {
+    -fx-background-color: transparent;
+    -fx-background-radius: 7px;
+    -fx-border-color: transparent;
+    -fx-border-radius: 7px;
+    -fx-border-width: 1px;
+    -fx-padding: 9px 15px;
+    -fx-text-fill: app-text;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: app-crimson-soft;
+}
+
+.button:pressed {
+    -fx-background-color: derive(app-crimson-soft, -5%);
+}
+
+.button-primary {
+    -fx-background-color: app-crimson;
+    -fx-border-color: app-crimson;
+    -fx-text-fill: app-surface;
+}
+
+.button-primary:hover {
+    -fx-background-color: app-crimson-hover;
+    -fx-border-color: app-crimson-hover;
+}
+
+.button-primary:pressed {
+    -fx-background-color: derive(app-crimson-hover, -8%);
+}
+
+.button-secondary {
+    -fx-background-color: app-surface;
+    -fx-border-color: app-border-strong;
+    -fx-text-fill: app-text;
+}
+
+.button-secondary:hover {
+    -fx-background-color: app-crimson-soft;
+    -fx-border-color: app-crimson;
+    -fx-text-fill: app-crimson;
+}
+
+.button-ghost,
+.icon-button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-text-fill: app-muted;
+}
+
+.button-ghost:hover,
+.icon-button:hover {
+    -fx-background-color: app-crimson-soft;
+    -fx-text-fill: app-crimson;
+}
+
+.button-danger {
+    -fx-background-color: app-crimson;
+    -fx-border-color: app-crimson;
+    -fx-text-fill: app-surface;
+}
+
+/* Text inputs */
+
+.text-field,
+.password-field,
+.text-area {
+    -fx-background-color: app-input;
+    -fx-background-radius: 7px;
+    -fx-border-color: app-border-strong;
+    -fx-border-radius: 7px;
+    -fx-border-width: 1px;
+    -fx-padding: 10px 12px;
+    -fx-text-fill: app-text;
+    -fx-prompt-text-fill: app-muted;
+    -fx-highlight-fill: app-crimson-soft;
+    -fx-highlight-text-fill: app-text;
+}
+
+.search-field {
+    -fx-background-color: app-surface;
+    -fx-background-radius: 18px;
+    -fx-border-color: app-border;
+    -fx-border-radius: 18px;
+    -fx-padding: 9px 14px;
+}
+
+.text-field:focused,
+.password-field:focused,
+.text-area:focused,
+.search-field:focused {
+    -fx-border-color: app-crimson;
+    -fx-effect: dropshadow(gaussian, app-focus-glow, 8px, 0.12, 0px, 1px);
+}
+
+.text-area {
+    -fx-padding: 0;
+}
+
+.text-area .content {
+    -fx-background-color: app-input;
+    -fx-background-radius: 7px;
+}
+
+.text-area:focused .content {
+    -fx-background-color: app-input;
+}
+
+/* Feed and lists */
+
+.post-card {
+    -fx-background-color: app-surface;
+    -fx-background-radius: 8px;
+    -fx-border-color: app-border;
+    -fx-border-radius: 8px;
+    -fx-border-width: 1px;
+    -fx-padding: 16px;
+}
+
+.post-card:hover {
+    -fx-border-color: app-border-strong;
+    -fx-effect: dropshadow(gaussian, rgba(26, 26, 27, 0.07), 8px, 0.08, 0px, 2px);
+}
+
+.post-actions {
+    -fx-background-color: transparent;
+}
+
+.feed-divider,
+.hairline-divider {
+    -fx-background-color: app-border;
+}
+
+.list-view,
+.scroll-pane {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.list-view .viewport,
+.scroll-pane .viewport {
+    -fx-background-color: transparent;
+}
+
+.list-view .list-cell {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-padding: 5px 0px;
+    -fx-text-fill: app-text;
+}
+
+.list-view .list-cell:filled:hover {
+    -fx-background-color: app-crimson-soft;
+}
+
+.list-view .list-cell:filled:selected,
+.list-view .list-cell:filled:selected:hover {
+    -fx-background-color: app-crimson-soft;
+    -fx-text-fill: app-text;
+}
+
+/* Navigation and tabs */
+
+.nav-item {
+    -fx-background-color: transparent;
+    -fx-background-radius: 7px;
+    -fx-padding: 10px 12px;
+    -fx-text-fill: app-text;
+    -fx-alignment: center-left;
+}
+
+.nav-item:hover {
+    -fx-background-color: app-crimson-soft;
+}
+
+.nav-item-active {
+    -fx-background-color: app-crimson-soft;
+    -fx-text-fill: app-crimson;
+    -fx-font-weight: bold;
+}
+
+.tab-pane {
+    -fx-tab-min-height: 40px;
+    -fx-tab-max-height: 40px;
+    -fx-background-color: transparent;
+}
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: app-canvas;
+    -fx-border-color: transparent transparent app-border transparent;
+    -fx-border-width: 0 0 1px 0;
+}
+
+.tab-pane .tab {
+    -fx-background-color: transparent;
+    -fx-background-radius: 0px;
+    -fx-border-color: transparent;
+    -fx-padding: 8px 14px;
+}
+
+.tab-pane .tab:hover {
+    -fx-background-color: app-crimson-soft;
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent transparent app-crimson transparent;
+    -fx-border-width: 0 0 3px 0;
+}
+
+.tab-pane .tab .tab-label {
+    -fx-text-fill: app-muted;
+    -fx-font-weight: bold;
+}
+
+.tab-pane .tab:selected .tab-label {
+    -fx-text-fill: app-crimson;
+}
+
+/* Separators and scrollbars */
+
+.separator .line {
+    -fx-border-color: app-border;
+    -fx-border-width: 1px 0 0 0;
+}
+
+.scroll-bar:vertical {
+    -fx-pref-width: 9px;
+    -fx-background-color: transparent;
+}
+
+.scroll-bar:horizontal {
+    -fx-pref-height: 9px;
+    -fx-background-color: transparent;
+}
+
+.scroll-bar .track {
+    -fx-background-color: transparent;
+    -fx-background-radius: 5px;
+}
+
+.scroll-bar .thumb {
+    -fx-background-color: app-border-strong;
+    -fx-background-radius: 5px;
+    -fx-background-insets: 2px;
+}
+
+.scroll-bar .thumb:hover {
+    -fx-background-color: app-muted;
+}
+
+.scroll-bar .increment-button,
+.scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0px;
+}
+
+.scroll-bar .increment-arrow,
+.scroll-bar .decrement-arrow {
+    -fx-background-color: transparent;
+    -fx-padding: 0px;
+}
+
+/* Selection controls */
+
+.check-box,
+.radio-button {
+    -fx-text-fill: app-text;
+}
+
+.check-box .box,
+.radio-button .radio {
+    -fx-background-color: app-surface;
+    -fx-border-color: app-border-strong;
+    -fx-border-radius: 4px;
+}
+
+.check-box:selected .mark,
+.radio-button:selected .dot {
+    -fx-background-color: app-crimson;
+}
+
+/* Status and validation */
+
+.validation-error {
+    -fx-text-fill: app-crimson;
+}
+
+.status-success {
+    -fx-text-fill: #287A46;
+}
+
+.status-warning {
+    -fx-text-fill: #9A6700;
+}
