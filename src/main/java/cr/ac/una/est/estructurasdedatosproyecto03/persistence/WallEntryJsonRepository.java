@@ -17,42 +17,49 @@ public class WallEntryJsonRepository{
     private static final Type wallEntryListType = new TypeToken<List<WallEntry>>(){}.getType();
     private final Path filePath;
     private final JsonDocumentStore documentStore;
+    private final List<WallEntry> wallEntries;
 
-    // Connect post data operations to one JSON file and the shared document store.
+    // Load the saved posts into a dynamic in-memory list so timeline requests use startup data.
     // Inputs: post file path and JSON document store; output: a ready post repository.
-    public WallEntryJsonRepository (Path filePath, JsonDocumentStore documentStore){
+    public WallEntryJsonRepository (Path filePath, JsonDocumentStore documentStore) throws IOException{
         this.filePath = Objects.requireNonNull(filePath, "Post file path cannot be null.");
         this.documentStore = Objects.requireNonNull(documentStore, "JSON document store cannot be null.");
-    }
 
-    // Load all saved posts so the timeline service can build feeds in memory.
-    // Output: a fresh list containing the saved wall entries.
-    public List<WallEntry> loadAll () throws IOException{
-        List<WallEntry> savedEntries = documentStore.readJson(
-            filePath,
+        List<WallEntry> savedEntries = this.documentStore.readJson(
+            this.filePath,
             wallEntryListType,
             ArrayList::new
         );
 
-        return new ArrayList<>(savedEntries);
+        this.wallEntries = new ArrayList<>(savedEntries);
+        ensureUniqueWallEntries(this.wallEntries);
+    }
+
+    // Return a copy of the in-memory post history so callers cannot change repository state directly.
+    // Output: a fresh list containing the saved wall entries.
+    public List<WallEntry> loadAll () throws IOException{
+        return new ArrayList<>(wallEntries);
     }
 
     // Add one post while checking existing records so its ID remains unique.
-    // Inputs: the post to add; output: none, the updated collection is saved to JSON.
+    // Inputs: the post to add; output: none, the updated collection is saved to JSON and memory.
     public void add (WallEntry wallEntry) throws IOException{
-        List<WallEntry> wallEntries = loadAll();
-        wallEntries.add(wallEntry);
-        saveAll(wallEntries);
+        List<WallEntry> updatedWallEntries = loadAll();
+        updatedWallEntries.add(wallEntry);
+        saveAll(updatedWallEntries);
     }
 
-    // Replace all saved posts so startup setup can write a complete initial data set.
-    // Inputs: all wall entries to save; output: none, the validated collection replaces the JSON data.
+    // Replace the post history in JSON and memory after validating the complete collection.
+    // Inputs: all wall entries to save; output: none, the validated collection replaces the stored data.
     public void saveAll (Collection<WallEntry> wallEntries) throws IOException{
         Objects.requireNonNull(wallEntries, "Post collection cannot be null.");
 
         List<WallEntry> wallEntryList = new ArrayList<>(wallEntries);
         ensureUniqueWallEntries(wallEntryList);
         documentStore.writeJson(filePath, wallEntryList);
+
+        this.wallEntries.clear();
+        this.wallEntries.addAll(wallEntryList);
     }
 
     // Reject invalid posts and duplicate IDs before writing post data.
