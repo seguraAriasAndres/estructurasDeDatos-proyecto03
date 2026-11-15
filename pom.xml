@@ -62,7 +62,7 @@
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>0.0.8</version>
                 <configuration>
-                    <mainClass>cr.ac.una.est.estructurasdedatosproyecto03/cr.ac.una.est.estructurasdedatosproyecto03.HelloApplication</mainClass>
+                    <mainClass>cr.ac.una.est.estructurasdedatosproyecto03/cr.ac.una.est.estructurasdedatosproyecto03.SocialCampusLauncher</mainClass>
                 </configuration>
             </plugin>
         </plugins>
