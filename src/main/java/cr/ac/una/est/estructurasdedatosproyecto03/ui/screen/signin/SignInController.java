@@ -48,12 +48,26 @@ public class SignInController{
         feedbackLabel.setText("");
     }
 
-    // Authenticate the entered credentials so only a valid account reaches the timeline.
+    // Validate required fields and authenticate the entered credentials.
     // Inputs: username and password from the sign-in fields; output: none, successful sign-in opens the timeline.
     @FXML
     private void handleSignIn (){
         String username = usernameField.getText();
         String password = passwordField.getText();
+
+        feedbackLabel.setText("");
+
+        if (username == null || username.trim().isEmpty()){
+            feedbackLabel.setText("Escribe tu nombre de usuario.");
+            usernameField.requestFocus();
+            return;
+        }
+
+        if (password == null || password.isEmpty()){
+            feedbackLabel.setText("Escribe tu contraseña.");
+            passwordField.requestFocus();
+            return;
+        }
 
         try{
             StudentAccount account = authenticationService.authenticate(username, password);
