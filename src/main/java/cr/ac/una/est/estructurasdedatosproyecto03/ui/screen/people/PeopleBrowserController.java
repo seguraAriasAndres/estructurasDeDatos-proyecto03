@@ -87,9 +87,19 @@ public class PeopleBrowserController{
             return;
         }
 
+        String searchQuery = searchField.getText();
+
+        if (searchQuery == null || searchQuery.trim().isEmpty()){
+            searchResultsContainer.getChildren().clear();
+            searchResultsContainer.getChildren().add(
+                createMessageLabel("Escribe un nombre o usuario para buscar.")
+            );
+            return;
+        }
+
         try{
             List<StudentAccount> matchingAccounts = peopleService.searchStudents(
-                searchField.getText(),
+                searchQuery,
                 activeAccount.getId()
             );
 
@@ -138,13 +148,15 @@ public class PeopleBrowserController{
         }
     }
 
-    // Open the timeline.
+    // Open the timeline so the signed-in student can return to the feed.
+    // Output: none; the timeline view is opened.
     @FXML
     private void openTimeline (){
         windowRouter.showTimeline();
     }
 
-    // Clear the active session.
+    // Clear the active session so the next screen cannot use the signed-in account.
+    // Output: none; the sign-in view is opened.
     @FXML
     private void handleSignOut (){
         accessSession.endSession();
