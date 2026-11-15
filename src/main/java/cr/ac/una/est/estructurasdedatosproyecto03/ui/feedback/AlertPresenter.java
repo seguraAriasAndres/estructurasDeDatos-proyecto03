@@ -6,7 +6,7 @@ import javafx.scene.control.ButtonType;
 import java.util.Optional;
 
 public class AlertPresenter{
-    // Show an error dialog so the user receives a clear Spanish explanation of a failed action.
+    // Show an error dialog so the user receives a clear explanation of a failed action.
     // Inputs: the message to display; output: none, the modal error dialog is shown.
     public void showError (String message){
         Alert alert = new Alert(Alert.AlertType.ERROR);
