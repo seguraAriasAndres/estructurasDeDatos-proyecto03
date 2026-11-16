@@ -1,5 +1,6 @@
 package cr.ac.una.est.estructurasdedatosproyecto03.service;
 
+import cr.ac.una.est.estructurasdedatosproyecto03.catalog.CareerCatalog;
 import cr.ac.una.est.estructurasdedatosproyecto03.model.StudentAccount;
 import cr.ac.una.est.estructurasdedatosproyecto03.persistence.AccountJsonRepository;
 import cr.ac.una.est.estructurasdedatosproyecto03.security.CredentialHasher;
@@ -38,15 +39,23 @@ public class AuthenticationService{
     }
 
     // Validate and save a new account so a student can later sign in with unique credentials.
-    // Inputs: student's full name, chosen username, and plain-text password; output: the newly saved account.
-    public StudentAccount register (String fullName, String username, String rawPassword) throws IOException{
-        validateRegistrationData(fullName, username, rawPassword);
+    // Inputs: name, username, password, career ID, and campus ID; output: the newly saved account.
+    public StudentAccount register (
+        String fullName,
+        String username,
+        String rawPassword,
+        String careerId,
+        String campusId
+    ) throws IOException{
+        validateRegistrationData(fullName, username, rawPassword, careerId, campusId);
 
         String normalizedUsername = normalizeUsername(username);
+        String normalizedCareerId = careerId.trim();
+        String normalizedCampusId = campusId.trim();
         StudentAccount existingAccount = accountRepository.findByUsername(normalizedUsername);
 
         if (existingAccount != null){
-            throw new IllegalArgumentException("That username is already in use.");
+            throw new IllegalArgumentException("Ese nombre de usuario ya está en uso.");
         }
 
         String accountId = UUID.randomUUID().toString();
@@ -55,7 +64,9 @@ public class AuthenticationService{
             accountId,
             fullName.trim(),
             normalizedUsername,
-            passwordHash
+            passwordHash,
+            normalizedCareerId,
+            normalizedCampusId
         );
 
         accountRepository.add(newAccount);
@@ -86,23 +97,38 @@ public class AuthenticationService{
         accessSession.endSession();
     }
 
-    // Simple validation and exception handling method.
-    // Inputs: full name, username, and plain-text password; output: none, invalid details raise an exception.
-    private void validateRegistrationData (String fullName, String username, String rawPassword){
+    // Validate the submitted account details before creating a new account.
+    // Inputs: name, username, password, career ID, and campus ID; output: none, invalid details raise an exception.
+    private void validateRegistrationData (
+        String fullName,
+        String username,
+        String rawPassword,
+        String careerId,
+        String campusId
+    ){
         if (fullName == null || fullName.trim().isEmpty()){
-            throw new IllegalArgumentException("Full name cannot be empty.");
+            throw new IllegalArgumentException("El nombre completo es obligatorio.");
         }
         if (username == null || username.trim().isEmpty()){
-            throw new IllegalArgumentException("Username cannot be empty.");
+            throw new IllegalArgumentException("El nombre de usuario es obligatorio.");
         }
         if (rawPassword == null || rawPassword.length() < minimumPasswordLength){
             throw new IllegalArgumentException(
-                "Password must contain at least " + minimumPasswordLength + " characters."
+                "La contraseña debe tener al menos " + minimumPasswordLength + " caracteres."
             );
+        }
+        if (careerId == null || careerId.trim().isEmpty()){
+            throw new IllegalArgumentException("Debes seleccionar una carrera.");
+        }
+        if (campusId == null || campusId.trim().isEmpty()){
+            throw new IllegalArgumentException("Debes seleccionar un campus.");
+        }
+        if (!CareerCatalog.isAvailable(careerId.trim(), campusId.trim())){
+            throw new IllegalArgumentException("La carrera seleccionada no se ofrece en ese campus.");
         }
     }
 
-    // Simple normalization method.
+    // Normalize a username so account lookup treats letter casing consistently.
     // Inputs: a username; output: a trimmed lowercase username.
     private String normalizeUsername (String username){
         return username.trim().toLowerCase(Locale.ROOT);
