@@ -76,7 +76,7 @@ public class PeopleBrowserController{
         refreshConnections();
     }
 
-    // Search by name or username while excluding the signed-in student from the results.
+    // Search by name or username, or show all other accounts when the query is blank.
     // Inputs: text entered in the search field; output: matching accounts appear in the results panel.
     @FXML
     private void handleSearch (){
@@ -89,14 +89,6 @@ public class PeopleBrowserController{
 
         String searchQuery = searchField.getText();
 
-        if (searchQuery == null || searchQuery.trim().isEmpty()){
-            searchResultsContainer.getChildren().clear();
-            searchResultsContainer.getChildren().add(
-                createMessageLabel("Escribe un nombre o usuario para buscar.")
-            );
-            return;
-        }
-
         try{
             List<StudentAccount> matchingAccounts = peopleService.searchStudents(
                 searchQuery,
@@ -106,9 +98,10 @@ public class PeopleBrowserController{
             renderAccounts(matchingAccounts, searchResultsContainer, true);
 
             if (matchingAccounts.isEmpty()){
-                searchResultsContainer.getChildren().add(
-                    createMessageLabel("No encontramos estudiantes con esa búsqueda.")
-                );
+                String emptyMessage = searchQuery == null || searchQuery.trim().isEmpty()
+                    ? "Todavía no hay otras personas registradas."
+                    : "No encontramos estudiantes con esa búsqueda.";
+                searchResultsContainer.getChildren().add(createMessageLabel(emptyMessage));
             }
         } catch (IOException exception){
             alertPresenter.showError(
