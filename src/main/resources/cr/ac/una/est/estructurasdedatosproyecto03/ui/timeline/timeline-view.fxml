@@ -31,6 +31,9 @@
                         styleClass="nav-item"
                         onAction="#openPeople"/>
                 <Label fx:id="activeNameLabel" HBox.hgrow="ALWAYS" styleClass="muted-text"/>
+                <Button text="Cambiar tema"
+                        styleClass="button-ghost"
+                        onAction="#handleToggleTheme"/>
                 <Button text="Cerrar sesión"
                         styleClass="button-ghost"
                         onAction="#handleSignOut"/>
