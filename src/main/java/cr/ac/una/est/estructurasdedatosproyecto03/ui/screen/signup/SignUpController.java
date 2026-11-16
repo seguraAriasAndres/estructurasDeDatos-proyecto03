@@ -193,4 +193,11 @@ public class SignUpController{
     private void returnToSignIn (){
         windowRouter.showSignIn();
     }
+
+    // Switch the interface theme while keeping the sign-up screen open.
+    // Output: none; the shared router changes the active screen theme.
+    @FXML
+    private void handleToggleTheme (){
+        windowRouter.toggleTheme();
+    }
 }
