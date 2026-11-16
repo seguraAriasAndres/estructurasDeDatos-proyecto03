@@ -1,24 +1,47 @@
-## Social UNA
+# Social UNA
 
-Un prototipo de red social de escritorio para la comunidad estudiantil de la Universidad Nacional.
+Prototipo de red social de escritorio para la comunidad estudiantil de la Universidad Nacional de Costa Rica.
 
-## Características
+## Funciones
 
-• Crear una cuenta e iniciar sesión.
-
-• Buscar estudiantes y agregar conexiones.
-
-• Publicar textos.
-
-• Ver tus publicaciones y las de tus conexiones en orden cronológico.
-
-• Guardar cuentas, conexiones y publicaciones de forma local como archivos JSON.
+- Registro e inicio de sesión
+- Búsqueda de estudiantes y conexión con otras cuentas
+- Publicación de mensajes
+- Muro con publicaciones propias y de las conexiones
+- Guardado local de cuentas, conexiones y publicaciones en archivos JSON
 
 ## Requisitos
 
-• Java 17 o superior.
+- Java JDK 17 o posterior
+- Conexión a internet la primera vez que se ejecuta, para descargar las dependencias de Maven
 
-• Acceso a internet la primera vez que ejecutes el proyecto, para que Maven pueda descargar sus dependencias.
+## Datos de demostración
 
-## UNA
-Este proyecto fue creado para el curso de Estructuras de Datos.
+Las tres cuentas de ejemplo usan la contraseña `socialuna2026`.
+
+| Usuario | Nombre |
+| --- | --- |
+| `ana.ruiz` | Ana Ruiz |
+| `luis.vargas` | Luis Vargas |
+| `sofia.mora` | Sofía Mora |
+
+Los archivos de ejemplo están en `sample-data/`. Para cargarlos, ejecuta desde la carpeta raíz del proyecto:
+
+    New-Item -ItemType Directory -Force .\data
+    Copy-Item .\sample-data\*.json .\data\
+
+**Advertencia:** copiar los ejemplos reemplaza archivos con los mismos nombres dentro de `data/`. Hazlo en una copia limpia del proyecto o respalda primero tus datos.
+
+## Almacenamiento
+
+La aplicación guarda las cuentas, conexiones y publicaciones en archivos JSON dentro de `data/`, relativo a la carpeta desde la que se ejecuta.
+
+## Tecnologías
+
+- Java 17
+- JavaFX
+- Maven
+- Gson
+- Archivos JSON
+
+Proyecto realizado para el curso de Estructuras de Datos.
