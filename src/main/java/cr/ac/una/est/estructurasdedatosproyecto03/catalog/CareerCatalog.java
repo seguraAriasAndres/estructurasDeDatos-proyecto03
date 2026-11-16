@@ -77,7 +77,7 @@ public final class CareerCatalog{
         return List.copyOf(availableCampuses);
     }
 
-    // Check that a career and campus are paired in the 2026 offer.
+    // Check that a career and campus are paired in the catalog.
     // Inputs: career ID and campus ID; output: true only when that combination is available.
     public static boolean isAvailable (String careerId, String campusId){
         if (careerId == null || campusId == null){
@@ -125,7 +125,7 @@ public final class CareerCatalog{
         return Collections.unmodifiableMap(campusesById);
     }
 
-    // Store each campus's 2026 career offer as Spanish catalog names.
+    // Store each campus's career offer as Spanish catalog names.
     // Output: an immutable campus-to-career mapping.
     private static Map<String, List<String>> createCareerNamesByCampus (){
         Map<String, List<String>> careerNamesByCampusId = new LinkedHashMap<>();
@@ -199,7 +199,6 @@ public final class CareerCatalog{
             "Gestión Empresarial del Turismo Sostenible",
             "Ingeniería en Calidad y Tecnología de Producción",
             "Ingeniería en Energías Sostenibles",
-            "Ingeniería en Sistemas de Información",
             "Inglés",
             "Pedagogía con Énfasis en I y II Ciclos de la Educación General Básica"
         ));
@@ -209,8 +208,7 @@ public final class CareerCatalog{
             "Enseñanza del Inglés",
             "Gestión Empresarial del Turismo Sostenible",
             "Ingeniería Hidrológica",
-            "Ingeniería en Calidad e Innovación Agroalimentaria",
-            "Ingeniería en Sistemas de Información"
+            "Ingeniería en Calidad e Innovación Agroalimentaria"
         ));
 
         careerNamesByCampusId.put("perez-zeledon", List.of(
@@ -219,7 +217,6 @@ public final class CareerCatalog{
             "Gestión Empresarial del Turismo Sostenible",
             "Ingeniería en Calidad e Innovación Agroalimentaria",
             "Ingeniería en Calidad y Tecnología de Producción",
-            "Ingeniería en Sistemas de Información",
             "Ingeniería en Tecnologías Computacionales para la Ciencia de Datos",
             "Inglés",
             "Inteligencia y Estrategia Global",
@@ -229,7 +226,6 @@ public final class CareerCatalog{
         careerNamesByCampusId.put("coto", List.of(
             "Administración",
             "Enseñanza del Inglés",
-            "Ingeniería en Sistemas de Información",
             "Ingeniería en Tecnologías Computacionales para la Ciencia de Datos"
         ));
 
@@ -237,7 +233,6 @@ public final class CareerCatalog{
             "Administración",
             "Comercio y Negocios Internacionales",
             "Educación Comercial",
-            "Ingeniería en Sistemas de Información",
             "Ingeniería en Tecnologías Computacionales para la Ciencia de Datos",
             "Inglés"
         ));
