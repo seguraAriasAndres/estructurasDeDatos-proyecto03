@@ -22,14 +22,12 @@ public class PeopleService{
         this.accountRepository = accountRepository;
     }
 
-    // Simple search method for finding other students.
+    // Search students by name or username, or return all other students for a blank query.
     // Inputs: search query and active account ID; output: matching accounts sorted by name.
     public List<StudentAccount> searchStudents (String searchQuery, String activeAccountId) throws IOException{
-        if (searchQuery == null || searchQuery.trim().isEmpty()){
-            return new ArrayList<>();
-        }
-
-        String normalizedQuery = searchQuery.trim().toLowerCase(Locale.ROOT);
+        String normalizedQuery = searchQuery == null
+            ? ""
+            : searchQuery.trim().toLowerCase(Locale.ROOT);
         List<StudentAccount> matchingAccounts = new ArrayList<>();
 
         for (StudentAccount account : accountRepository.loadAll()){
@@ -47,7 +45,9 @@ public class PeopleService{
                 ? ""
                 : account.getUsername().toLowerCase(Locale.ROOT);
 
-            if (normalizedName.contains(normalizedQuery) || normalizedUsername.contains(normalizedQuery)){
+            if (normalizedQuery.isEmpty()
+                || normalizedName.contains(normalizedQuery)
+                || normalizedUsername.contains(normalizedQuery)){
                 matchingAccounts.add(account);
             }
         }
