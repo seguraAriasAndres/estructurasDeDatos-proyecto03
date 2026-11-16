@@ -198,7 +198,35 @@
 }
 
 .combo-box .list-cell {
-    -fx-background-color: transparent;
+    -fx-background-color: app-input;
+    -fx-text-fill: app-text;
+}
+
+/* Give the popup and every option an opaque surface. */
+
+.combo-box-popup {
+    -fx-background-color: app-surface;
+}
+
+.combo-box-popup > .list-view {
+    -fx-background-color: app-surface;
+    -fx-background-insets: 0;
+    -fx-background-radius: 6px;
+    -fx-border-color: app-border-strong;
+    -fx-border-radius: 6px;
+    -fx-border-width: 1px;
+    -fx-padding: 2px;
+}
+
+.combo-box-popup .list-cell {
+    -fx-background-color: app-surface;
+    -fx-text-fill: app-text;
+    -fx-padding: 8px 12px;
+}
+
+.combo-box-popup .list-cell:filled:hover,
+.combo-box-popup .list-cell:filled:selected {
+    -fx-background-color: app-crimson-soft;
     -fx-text-fill: app-text;
 }
 
@@ -440,13 +468,19 @@
     -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.28), 8px, 0.08, 0px, 2px);
 }
 
-.dark-theme .combo-box-popup .list-view,
+.dark-theme .combo-box .list-cell {
+    -fx-background-color: app-input;
+    -fx-text-fill: app-text;
+}
+
+.dark-theme .combo-box-popup,
+.dark-theme .combo-box-popup > .list-view,
 .dark-theme .combo-box-popup .list-cell {
     -fx-background-color: app-surface;
     -fx-text-fill: app-text;
 }
 
-.dark-theme .combo-box-popup .list-cell:hover,
+.dark-theme .combo-box-popup .list-cell:filled:hover,
 .dark-theme .combo-box-popup .list-cell:filled:selected {
     -fx-background-color: app-crimson-soft;
     -fx-text-fill: app-text;
