@@ -173,7 +173,7 @@ public class WindowRouter{
                 controllerType,
                 new Class<?>[]{
                     cr.ac.una.est.estructurasdedatosproyecto03.service.TimelineService.class,
-                    cr.ac.una.esttructurasdedatosproyecto03.service.PeopleService.class,
+                    cr.ac.una.est.estructurasdedatosproyecto03.service.PeopleService.class,,
                     cr.ac.una.est.estructurasdedatosproyecto03.session.AccessSession.class,
                     WindowRouter.class,
                     AlertPresenter.class
