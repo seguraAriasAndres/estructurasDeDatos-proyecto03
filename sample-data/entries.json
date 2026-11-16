@@ -1,0 +1,29 @@
+[
+  {
+    "id": "entry-demo-001",
+    "authorId": "student-demo-001",
+    "message": "¡Hola! Ya estoy usando Social UNA.",
+    "createdAt": {
+      "seconds": 1794779100,
+      "nanos": 0
+    }
+  },
+  {
+    "id": "entry-demo-002",
+    "authorId": "student-demo-002",
+    "message": "¿Quién más está preparando los proyectos de esta semana?",
+    "createdAt": {
+      "seconds": 1794780900,
+      "nanos": 0
+    }
+  },
+  {
+    "id": "entry-demo-003",
+    "authorId": "student-demo-003",
+    "message": "Un saludo a toda la comunidad estudiantil.",
+    "createdAt": {
+      "seconds": 1794782700,
+      "nanos": 0
+    }
+  }
+]

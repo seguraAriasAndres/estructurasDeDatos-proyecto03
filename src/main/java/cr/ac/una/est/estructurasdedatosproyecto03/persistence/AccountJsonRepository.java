@@ -18,24 +18,28 @@ public class AccountJsonRepository{
     private static final Type accountListType = new TypeToken<List<StudentAccount>>(){}.getType();
     private final Path filePath;
     private final JsonDocumentStore documentStore;
+    private final List<StudentAccount> accounts;
 
-    // Connect account data operations to one JSON file and the shared document store.
+    // Load the saved accounts into a dynamic in-memory list so searches use startup data.
     // Inputs: account file path and JSON document store; output: a ready account repository.
-    public AccountJsonRepository (Path filePath, JsonDocumentStore documentStore){
+    public AccountJsonRepository (Path filePath, JsonDocumentStore documentStore) throws IOException{
         this.filePath = Objects.requireNonNull(filePath, "Account file path cannot be null.");
         this.documentStore = Objects.requireNonNull(documentStore, "JSON document store cannot be null.");
-    }
 
-    // Load all saved accounts so services can search the in-memory collection.
-    // Output: a fresh list containing the saved student accounts.
-    public List<StudentAccount> loadAll () throws IOException{
-        List<StudentAccount> savedAccounts = documentStore.readJson(
-            filePath,
+        List<StudentAccount> savedAccounts = this.documentStore.readJson(
+            this.filePath,
             accountListType,
             ArrayList::new
         );
 
-        return new ArrayList<>(savedAccounts);
+        this.accounts = new ArrayList<>(savedAccounts);
+        ensureUniqueAccounts(this.accounts);
+    }
+
+    // Return a copy of the in-memory account catalog so callers cannot change repository state directly.
+    // Output: a fresh list containing the saved student accounts.
+    public List<StudentAccount> loadAll () throws IOException{
+        return new ArrayList<>(accounts);
     }
 
     // Find one account by ID so services can verify account references.
@@ -47,7 +51,7 @@ public class AccountJsonRepository{
 
         String normalizedAccountId = accountId.trim();
 
-        for (StudentAccount account : loadAll()){
+        for (StudentAccount account : accounts){
             if (account != null && normalizedAccountId.equals(account.getId())){
                 return account;
             }
@@ -65,7 +69,7 @@ public class AccountJsonRepository{
 
         String normalizedUsername = username.trim();
 
-        for (StudentAccount account : loadAll()){
+        for (StudentAccount account : accounts){
             if (account != null
                 && account.getUsername() != null
                 && normalizedUsername.equalsIgnoreCase(account.getUsername().trim())){
@@ -77,21 +81,24 @@ public class AccountJsonRepository{
     }
 
     // Add one account while checking the existing records so duplicate credentials are rejected.
-    // Inputs: the account to add; output: none, the updated collection is saved to JSON.
+    // Inputs: the account to add; output: none, the updated collection is saved to JSON and memory.
     public void add (StudentAccount account) throws IOException{
-        List<StudentAccount> accounts = loadAll();
-        accounts.add(account);
-        saveAll(accounts);
+        List<StudentAccount> updatedAccounts = loadAll();
+        updatedAccounts.add(account);
+        saveAll(updatedAccounts);
     }
 
-    // Replace the saved account collection so startup setup can write a complete initial data set.
-    // Inputs: all accounts to save; output: none, the validated collection replaces the JSON data.
+    // Replace the account catalog in JSON and memory after validating the complete collection.
+    // Inputs: all accounts to save; output: none, the validated collection replaces the stored data.
     public void saveAll (Collection<StudentAccount> accounts) throws IOException{
         Objects.requireNonNull(accounts, "Account collection cannot be null.");
 
         List<StudentAccount> accountList = new ArrayList<>(accounts);
         ensureUniqueAccounts(accountList);
         documentStore.writeJson(filePath, accountList);
+
+        this.accounts.clear();
+        this.accounts.addAll(accountList);
     }
 
     // Reject invalid records and duplicate IDs or usernames before writing account data.
