@@ -102,16 +102,25 @@ public class TimelineController{
     }
 
     // Open people search.
+    // Output: none; the people view is opened.
     @FXML
     private void openPeople (){
         windowRouter.showPeople();
     }
 
     // Clear the session.
+    // Output: none; the sign-in view is opened.
     @FXML
     private void handleSignOut (){
         accessSession.endSession();
         windowRouter.showSignIn();
+    }
+
+    // Switch the interface theme while keeping the timeline screen open.
+    // Output: none; the shared router changes the active screen theme.
+    @FXML
+    private void handleToggleTheme (){
+        windowRouter.toggleTheme();
     }
 
     // Reload the feed so it reflects saved posts from the student and their connections.
