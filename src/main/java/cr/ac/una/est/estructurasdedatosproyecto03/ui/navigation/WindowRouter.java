@@ -41,21 +41,25 @@ public class WindowRouter{
     }
 
     // Open the sign-in view.
+    // Output: none; the sign-in view is shown.
     public void showSignIn (){
         loadView(resourceRoot + "signin/sign-in-view.fxml", "Social UNA | Iniciar sesión");
     }
 
     // Open the registration view.
+    // Output: none; the registration view is shown.
     public void showSignUp (){
         loadView(resourceRoot + "signup/sign-up-view.fxml", "Social UNA | Crear cuenta");
     }
 
     // Open the timeline view.
+    // Output: none; the timeline view is shown.
     public void showTimeline (){
         loadView(resourceRoot + "timeline/timeline-view.fxml", "Social UNA | Inicio");
     }
 
     // Open the people view.
+    // Output: none; the people view is shown.
     public void showPeople (){
         loadView(resourceRoot + "people/people-view.fxml", "Social UNA | Personas");
     }
@@ -72,8 +76,8 @@ public class WindowRouter{
         }
     }
 
-    // Load one FXML screen and apply its stylesheet and current theme.
-    // Inputs: FXML resource path and window title; output: the stage changes view or displays an error.
+    // Load one FXML screen and reuse the existing scene when navigating.
+    // Inputs: FXML resource path and window title; output: the stage displays the requested screen.
     private void loadView (String fxmlPath, String windowTitle){
         URL viewResource = SocialCampusApplication.class.getResource(fxmlPath);
 
@@ -88,19 +92,30 @@ public class WindowRouter{
 
             Parent root = loader.load();
             applyTheme(root);
-            Scene scene = new Scene(root);
 
-            URL styleResource = SocialCampusApplication.class.getResource(
-                "/cr/ac/una/est/estructurasdedatosproyecto03/social-una.css"
-            );
+            Scene currentScene = primaryStage.getScene();
 
-            if (styleResource != null){
-                scene.getStylesheets().add(styleResource.toExternalForm());
+            if (currentScene == null){
+                currentScene = new Scene(root);
+
+                URL styleResource = SocialCampusApplication.class.getResource(
+                    "/cr/ac/una/est/estructurasdedatosproyecto03/social-una.css"
+                );
+
+                if (styleResource != null){
+                    currentScene.getStylesheets().add(styleResource.toExternalForm());
+                }
+
+                primaryStage.setScene(currentScene);
+            } else{
+                currentScene.setRoot(root);
             }
 
             primaryStage.setTitle(windowTitle);
-            primaryStage.setScene(scene);
-            primaryStage.show();
+
+            if (!primaryStage.isShowing()){
+                primaryStage.show();
+            }
         } catch (IOException | RuntimeException exception){
             alertPresenter.showError("No se pudo abrir la vista. " + exception.getMessage());
         }
