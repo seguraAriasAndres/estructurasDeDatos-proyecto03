@@ -147,11 +147,13 @@
     -fx-text-fill: app-surface;
 }
 
-/* Text inputs */
+/* Text inputs and selection menus */
 
 .text-field,
 .password-field,
-.text-area {
+.text-area,
+.combo-box,
+.combo-box-base {
     -fx-background-color: app-input;
     -fx-background-radius: 7px;
     -fx-border-color: app-border-strong;
@@ -175,7 +177,9 @@
 .text-field:focused,
 .password-field:focused,
 .text-area:focused,
-.search-field:focused {
+.search-field:focused,
+.combo-box:focused,
+.combo-box-base:focused {
     -fx-border-color: app-crimson;
     -fx-effect: dropshadow(gaussian, app-focus-glow, 8px, 0.12, 0px, 1px);
 }
@@ -191,6 +195,11 @@
 
 .text-area:focused .content {
     -fx-background-color: app-input;
+}
+
+.combo-box .list-cell {
+    -fx-background-color: transparent;
+    -fx-text-fill: app-text;
 }
 
 /* Feed and lists */
@@ -379,4 +388,66 @@
 
 .status-warning {
     -fx-text-fill: #9A6700;
+}
+
+/* Dark theme palette and controls */
+
+.dark-theme {
+    app-canvas: #17191E;
+    app-surface: #23272F;
+    app-crimson: #F06A7E;
+    app-crimson-hover: #FF8798;
+    app-crimson-soft: #452832;
+    app-text: #F1F3F5;
+    app-muted: #B2BBC6;
+    app-border: #3B424D;
+    app-border-strong: #586270;
+    app-input: #292E37;
+    app-focus-glow: rgba(240, 106, 126, 0.24);
+
+    -fx-base: app-surface;
+    -fx-background: app-canvas;
+    -fx-control-inner-background: app-input;
+    -fx-control-inner-background-alt: app-surface;
+    -fx-accent: app-crimson;
+    -fx-focus-color: app-crimson;
+    -fx-faint-focus-color: app-focus-glow;
+    -fx-background-color: app-canvas;
+}
+
+.dark-theme .label,
+.dark-theme .check-box,
+.dark-theme .radio-button {
+    -fx-text-fill: app-text;
+}
+
+.dark-theme .brand-mark,
+.dark-theme .text-link,
+.dark-theme .nav-item-active,
+.dark-theme .tab-pane .tab:selected .tab-label {
+    -fx-text-fill: app-crimson;
+}
+
+.dark-theme .status-success {
+    -fx-text-fill: #72D69A;
+}
+
+.dark-theme .status-warning {
+    -fx-text-fill: #F3C86A;
+}
+
+.dark-theme .post-card:hover {
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.28), 8px, 0.08, 0px, 2px);
+}
+
+.dark-theme .combo-box-popup .list-view,
+.dark-theme .combo-box-popup .list-cell {
+    -fx-background-color: app-surface;
+    -fx-text-fill: app-text;
+}
+
+.dark-theme .combo-box-popup .list-cell:hover,
+.dark-theme .combo-box-popup .list-cell:filled:selected {
+    -fx-background-color: app-crimson-soft;
+    -fx-text-fill: app-text;
 }

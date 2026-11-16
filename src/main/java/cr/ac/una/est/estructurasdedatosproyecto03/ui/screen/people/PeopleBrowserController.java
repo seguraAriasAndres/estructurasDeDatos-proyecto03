@@ -163,6 +163,13 @@ public class PeopleBrowserController{
         windowRouter.showSignIn();
     }
 
+    // Switch the interface theme while keeping the people screen open.
+    // Output: none; the shared router changes the active screen theme.
+    @FXML
+    private void handleToggleTheme (){
+        windowRouter.toggleTheme();
+    }
+
     // Reload and render the signed-in student's connections from the graph and account repository.
     // Output: none; the connections panel reflects the current saved links.
     private void refreshConnections (){

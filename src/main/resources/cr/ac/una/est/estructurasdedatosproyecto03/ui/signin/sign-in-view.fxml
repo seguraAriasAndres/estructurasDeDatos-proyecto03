@@ -25,6 +25,10 @@
             </padding>
             <children>
                 <Label text="Social UNA" styleClass="brand-mark"/>
+                <Button text="Cambiar tema"
+                        maxWidth="Infinity"
+                        styleClass="button-ghost"
+                        onAction="#handleToggleTheme"/>
                 <Label text="Conectamos a la comunidad estudiantil"
                        wrapText="true"
                        styleClass="muted-text"/>

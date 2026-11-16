@@ -22,6 +22,7 @@ public class WindowRouter{
     private final Stage primaryStage;
     private final ApplicationContext applicationContext;
     private final AlertPresenter alertPresenter;
+    private boolean darkThemeEnabled;
 
     // Keep the primary window and shared services available for navigation and controller creation.
     // Inputs: primary JavaFX stage and application context; output: a ready view router.
@@ -36,6 +37,7 @@ public class WindowRouter{
         this.primaryStage = primaryStage;
         this.applicationContext = applicationContext;
         this.alertPresenter = new AlertPresenter();
+        this.darkThemeEnabled = false;
     }
 
     // Open the sign-in view.
@@ -58,7 +60,19 @@ public class WindowRouter{
         loadView(resourceRoot + "people/people-view.fxml", "Social UNA | Personas");
     }
 
-    // Load one FXML screen and apply the shared stylesheet to its scene.
+    // Switch the active screen between light and dark styling.
+    // Output: none; the active screen and future screens use the selected theme.
+    public void toggleTheme (){
+        darkThemeEnabled = !darkThemeEnabled;
+
+        Scene currentScene = primaryStage.getScene();
+
+        if (currentScene != null){
+            applyTheme(currentScene.getRoot());
+        }
+    }
+
+    // Load one FXML screen and apply its stylesheet and current theme.
     // Inputs: FXML resource path and window title; output: the stage changes view or displays an error.
     private void loadView (String fxmlPath, String windowTitle){
         URL viewResource = SocialCampusApplication.class.getResource(fxmlPath);
@@ -73,6 +87,7 @@ public class WindowRouter{
             loader.setControllerFactory(this::createController);
 
             Parent root = loader.load();
+            applyTheme(root);
             Scene scene = new Scene(root);
 
             URL styleResource = SocialCampusApplication.class.getResource(
@@ -88,6 +103,16 @@ public class WindowRouter{
             primaryStage.show();
         } catch (IOException | RuntimeException exception){
             alertPresenter.showError("No se pudo abrir la vista. " + exception.getMessage());
+        }
+    }
+
+    // Apply the current theme class to one screen root.
+    // Inputs: screen root; output: the root reflects the router's theme state.
+    private void applyTheme (Parent root){
+        root.getStyleClass().remove("dark-theme");
+
+        if (darkThemeEnabled){
+            root.getStyleClass().add("dark-theme");
         }
     }
 
@@ -148,7 +173,7 @@ public class WindowRouter{
                 controllerType,
                 new Class<?>[]{
                     cr.ac.una.est.estructurasdedatosproyecto03.service.TimelineService.class,
-                    cr.ac.una.est.estructurasdedatosproyecto03.service.PeopleService.class,
+                    cr.ac.una.est.estructurasdedatosproyecto03.service.PeopleService.class,,
                     cr.ac.una.est.estructurasdedatosproyecto03.session.AccessSession.class,
                     WindowRouter.class,
                     AlertPresenter.class

@@ -3,18 +3,24 @@
     "id": "student-demo-001",
     "fullName": "Ana Ruiz",
     "username": "ana.ruiz",
-    "passwordHash": "pbkdf2-sha256$262144$4Brb4+MJpo6De+GZSfi/Gg==$Goi1eqNMRsRsBlVVVhDY+6K29NUfQfPsIjCXpT/22mM="
+    "passwordHash": "pbkdf2-sha256$262144$4Brb4+MJpo6De+GZSfi/Gg==$Goi1eqNMRsRsBlVVVhDY+6K29NUfQfPsIjCXpT/22mM=",
+    "careerId": "ingenieria-en-sistemas-de-informacion",
+    "campusId": "liberia"
   },
   {
     "id": "student-demo-002",
     "fullName": "Luis Vargas",
     "username": "luis.vargas",
-    "passwordHash": "pbkdf2-sha256$262144$IzpYis6KPSGF6XCOn+IQ/g==$ASqHkkqKfd1FMV35NlnJROfKgvGCmh5voC8djhUTfMQ="
+    "passwordHash": "pbkdf2-sha256$262144$IzpYis6KPSGF6XCOn+IQ/g==$ASqHkkqKfd1FMV35NlnJROfKgvGCmh5voC8djhUTfMQ=",
+    "careerId": "administracion",
+    "campusId": "nicoya"
   },
   {
     "id": "student-demo-003",
     "fullName": "Sofía Mora",
     "username": "sofia.mora",
-    "passwordHash": "pbkdf2-sha256$262144$vJtz8sa9hF4CezSLC+0vCg==$CCzbg8Q4tvFb22xpSf29TIhCXlKSi7rcfDi6TvmhK7c="
+    "passwordHash": "pbkdf2-sha256$262144$vJtz8sa9hF4CezSLC+0vCg==$CCzbg8Q4tvFb22xpSf29TIhCXlKSi7rcfDi6TvmhK7c=",
+    "careerId": "arte-escenico",
+    "campusId": "omar-dengo"
   }
 ]

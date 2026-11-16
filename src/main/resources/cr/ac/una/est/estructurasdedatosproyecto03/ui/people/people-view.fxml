@@ -28,6 +28,9 @@
                 <Button text="Inicio" styleClass="nav-item" onAction="#openTimeline"/>
                 <Button text="Personas" styleClass="nav-item-active"/>
                 <Label fx:id="activeNameLabel" HBox.hgrow="ALWAYS" styleClass="muted-text"/>
+                <Button text="Cambiar tema"
+                        styleClass="button-ghost"
+                        onAction="#handleToggleTheme"/>
                 <Button text="Cerrar sesión"
                         styleClass="button-ghost"
                         onAction="#handleSignOut"/>

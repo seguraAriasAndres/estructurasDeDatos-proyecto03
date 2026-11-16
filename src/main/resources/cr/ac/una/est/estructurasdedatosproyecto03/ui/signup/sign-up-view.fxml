@@ -2,6 +2,7 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.PasswordField?>
@@ -14,17 +15,21 @@
            xmlns:fx="http://javafx.com/fxml/1"
            fx:controller="cr.ac.una.est.estructurasdedatosproyecto03.ui.screen.signup.SignUpController"
            prefWidth="1000.0"
-           prefHeight="760.0"
+           prefHeight="900.0"
            styleClass="page-root">
     <children>
         <VBox maxWidth="460.0"
               spacing="15.0"
               styleClass="surface-card">
             <padding>
-                <Insets top="28.0" right="32.0" bottom="28.0" left="32.0"/>
+                <Insets top="24.0" right="32.0" bottom="24.0" left="32.0"/>
             </padding>
             <children>
                 <Label text="Social UNA" styleClass="brand-mark"/>
+                <Button text="Cambiar tema"
+                        maxWidth="Infinity"
+                        styleClass="button-ghost"
+                        onAction="#handleToggleTheme"/>
                 <Label text="Únete a la comunidad estudiantil"
                        wrapText="true"
                        styleClass="muted-text"/>
@@ -38,6 +43,20 @@
                 <VBox spacing="7.0">
                     <Label text="Usuario"/>
                     <TextField fx:id="usernameField" promptText="Elige un nombre de usuario"/>
+                </VBox>
+
+                <VBox spacing="7.0">
+                    <Label text="Carrera"/>
+                    <ComboBox fx:id="careerField"
+                              maxWidth="Infinity"
+                              promptText="Selecciona tu carrera"/>
+                </VBox>
+
+                <VBox spacing="7.0">
+                    <Label text="Campus"/>
+                    <ComboBox fx:id="campusField"
+                              maxWidth="Infinity"
+                              promptText="Selecciona tu campus"/>
                 </VBox>
 
                 <VBox spacing="7.0">
