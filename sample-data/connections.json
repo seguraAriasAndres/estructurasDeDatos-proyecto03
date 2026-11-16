@@ -1,0 +1,18 @@
+[
+  {
+    "firstAccountId": "student-demo-001",
+    "secondAccountId": "student-demo-002",
+    "createdAt": {
+      "seconds": 1794603600,
+      "nanos": 0
+    }
+  },
+  {
+    "firstAccountId": "student-demo-002",
+    "secondAccountId": "student-demo-003",
+    "createdAt": {
+      "seconds": 1794690000,
+      "nanos": 0
+    }
+  }
+]
