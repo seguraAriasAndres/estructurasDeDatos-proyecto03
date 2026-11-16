@@ -76,7 +76,66 @@ public class ConnectionsService{
         return connection;
     }
 
-    // Resolve graph neighbors to account details so the interface can actually display a proper friend list.
+    // Remove a mutual link from memory and saved data so both students are disconnected.
+    // Inputs: the two account IDs; output: true when a saved connection was removed.
+    public boolean removeConnection (String firstAccountId, String secondAccountId) throws IOException{
+        String normalizedFirstId = normalizeAccountId(firstAccountId);
+        String normalizedSecondId = normalizeAccountId(secondAccountId);
+
+        if (normalizedFirstId.equals(normalizedSecondId)){
+            throw new IllegalArgumentException("No puedes eliminar una conexión contigo mismo.");
+        }
+        if (accountRepository.findById(normalizedFirstId) == null
+            || accountRepository.findById(normalizedSecondId) == null){
+            throw new IllegalArgumentException("No se encontraron ambas cuentas.");
+        }
+        if (!connectionGraph.areConnected(normalizedFirstId, normalizedSecondId)){
+            return false;
+        }
+
+        List<StudentConnection> savedConnections = connectionRepository.loadAll();
+        List<StudentConnection> remainingConnections = new ArrayList<>();
+        StudentConnection removedConnection = null;
+
+        for (StudentConnection connection : savedConnections){
+            if (connection == null){
+                continue;
+            }
+
+            boolean matchesConnection = isSameConnection(
+                connection,
+                normalizedFirstId,
+                normalizedSecondId
+            );
+
+            if (matchesConnection && removedConnection == null){
+                removedConnection = connection;
+            } else{
+                remainingConnections.add(connection);
+            }
+        }
+
+        if (removedConnection == null){
+            throw new IllegalStateException(
+                "La conexión existe en memoria, pero no aparece en los datos guardados."
+            );
+        }
+
+        if (!connectionGraph.removeConnection(normalizedFirstId, normalizedSecondId)){
+            return false;
+        }
+
+        try{
+            connectionRepository.saveAll(remainingConnections);
+        } catch (IOException exception){
+            connectionGraph.addConnection(removedConnection);
+            throw exception;
+        }
+
+        return true;
+    }
+
+    // Resolve graph neighbors to account details so the interface can display a proper connection list.
     // Inputs: one account ID; output: existing connected accounts sorted by name.
     public List<StudentAccount> listConnections (String accountId) throws IOException{
         String normalizedAccountId = normalizeAccountId(accountId);
@@ -103,7 +162,7 @@ public class ConnectionsService{
         return connectedAccounts;
     }
 
-    // Check the graph so screens and services can determine if two students are or aren't connected.
+    // Check the graph so screens and services can determine if two students are connected.
     // Inputs: two account IDs; output: true when a mutual connection exists, otherwise false.
     public boolean areConnected (String firstAccountId, String secondAccountId){
         if (firstAccountId == null || secondAccountId == null){
@@ -111,6 +170,29 @@ public class ConnectionsService{
         }
 
         return connectionGraph.areConnected(firstAccountId.trim(), secondAccountId.trim());
+    }
+
+    // Compare a saved connection without depending on which account ID was stored first.
+    // Inputs: connection record and two account IDs; output: true when both IDs match the link.
+    private boolean isSameConnection (
+        StudentConnection connection,
+        String firstAccountId,
+        String secondAccountId
+    ){
+        String savedFirstId = connection.getFirstAccountId();
+        String savedSecondId = connection.getSecondAccountId();
+
+        if (savedFirstId == null || savedSecondId == null){
+            return false;
+        }
+
+        String normalizedSavedFirstId = savedFirstId.trim();
+        String normalizedSavedSecondId = savedSecondId.trim();
+
+        return normalizedSavedFirstId.equals(firstAccountId)
+            && normalizedSavedSecondId.equals(secondAccountId)
+            || normalizedSavedFirstId.equals(secondAccountId)
+            && normalizedSavedSecondId.equals(firstAccountId);
     }
 
     // Reject missing account IDs and trim valid values before repository and graph operations.

@@ -76,7 +76,7 @@ public class PeopleBrowserController{
         refreshConnections();
     }
 
-    // Search by name or username while excluding the signed-in student from the results.
+    // Search by name or username, or show all other accounts when the query is blank.
     // Inputs: text entered in the search field; output: matching accounts appear in the results panel.
     @FXML
     private void handleSearch (){
@@ -89,26 +89,24 @@ public class PeopleBrowserController{
 
         String searchQuery = searchField.getText();
 
-        if (searchQuery == null || searchQuery.trim().isEmpty()){
-            searchResultsContainer.getChildren().clear();
-            searchResultsContainer.getChildren().add(
-                createMessageLabel("Escribe un nombre o usuario para buscar.")
-            );
-            return;
-        }
-
         try{
             List<StudentAccount> matchingAccounts = peopleService.searchStudents(
                 searchQuery,
                 activeAccount.getId()
             );
 
-            renderAccounts(matchingAccounts, searchResultsContainer, true);
+            renderAccounts(
+                matchingAccounts,
+                searchResultsContainer,
+                activeAccount.getId(),
+                true
+            );
 
             if (matchingAccounts.isEmpty()){
-                searchResultsContainer.getChildren().add(
-                    createMessageLabel("No encontramos estudiantes con esa búsqueda.")
-                );
+                String emptyMessage = searchQuery == null || searchQuery.trim().isEmpty()
+                    ? "Todavía no hay otras personas registradas."
+                    : "No encontramos estudiantes con esa búsqueda.";
+                searchResultsContainer.getChildren().add(createMessageLabel(emptyMessage));
             }
         } catch (IOException exception){
             alertPresenter.showError(
@@ -117,8 +115,8 @@ public class PeopleBrowserController{
         }
     }
 
-    // Add the selected account as a mutual connection and refresh the displayed list.
-    // Inputs: selected student account; output: none, the connection is saved and shown in the list.
+    // Add the selected account as a connection and refresh both visible account lists.
+    // Inputs: selected student account; output: none, the result button and connection list are refreshed.
     private void handleAddConnection (StudentAccount targetAccount){
         StudentAccount activeAccount = accessSession.getCurrentAccount();
 
@@ -134,9 +132,6 @@ public class PeopleBrowserController{
 
         try{
             connectionsService.addConnection(activeAccount.getId(), targetAccount.getId());
-            alertPresenter.showInformation(
-                "Ahora tienes una conexión con " + targetAccount.getFullName() + "."
-            );
             refreshConnections();
             handleSearch();
         } catch (IllegalArgumentException exception){
@@ -144,6 +139,42 @@ public class PeopleBrowserController{
         } catch (IOException exception){
             alertPresenter.showError(
                 "No se pudo guardar la conexión. " + exception.getMessage()
+            );
+        }
+    }
+
+    // Remove the selected account as a connection and refresh both visible account lists.
+    // Inputs: selected student account; output: none, the result button and connection list are refreshed.
+    private void handleRemoveConnection (StudentAccount targetAccount){
+        StudentAccount activeAccount = accessSession.getCurrentAccount();
+
+        if (activeAccount == null){
+            windowRouter.showSignIn();
+            return;
+        }
+
+        if (targetAccount == null){
+            alertPresenter.showError("Selecciona un estudiante válido.");
+            return;
+        }
+
+        try{
+            boolean removed = connectionsService.removeConnection(
+                activeAccount.getId(),
+                targetAccount.getId()
+            );
+
+            if (!removed){
+                alertPresenter.showInformation("Esta persona ya no está en tus conexiones.");
+            }
+
+            refreshConnections();
+            handleSearch();
+        } catch (IllegalArgumentException exception){
+            alertPresenter.showInformation(exception.getMessage());
+        } catch (IOException | IllegalStateException exception){
+            alertPresenter.showError(
+                "No se pudo eliminar la conexión. " + exception.getMessage()
             );
         }
     }
@@ -184,7 +215,7 @@ public class PeopleBrowserController{
             List<StudentAccount> connectedAccounts = connectionsService.listConnections(
                 activeAccount.getId()
             );
-            renderAccounts(connectedAccounts, connectionsContainer, false);
+            renderAccounts(connectedAccounts, connectionsContainer, activeAccount.getId(), false);
 
             if (connectedAccounts.isEmpty()){
                 connectionsContainer.getChildren().add(
@@ -198,25 +229,32 @@ public class PeopleBrowserController{
         }
     }
 
-    // Create compact account rows and add a connection button only for search results.
-    // Inputs: accounts to show, destination container, and whether rows allow adding; output: none, the container is replaced with account rows.
+    // Create account rows and optionally add connection actions for each result.
+    // Inputs: accounts, destination container, active account ID, and action visibility; output: the container is refreshed.
     private void renderAccounts (
         List<StudentAccount> accounts,
         VBox destination,
-        boolean allowConnection
+        String activeAccountId,
+        boolean showConnectionActions
     ){
         destination.getChildren().clear();
 
         for (StudentAccount account : accounts){
             if (account != null){
-                destination.getChildren().add(createAccountRow(account, allowConnection));
+                destination.getChildren().add(
+                    createAccountRow(account, activeAccountId, showConnectionActions)
+                );
             }
         }
     }
 
-    // Build one styled account card so names, usernames, and connection actions scan clearly.
-    // Inputs: account to display and whether to show its add button; output: the completed account row.
-    private HBox createAccountRow (StudentAccount account, boolean allowConnection){
+    // Build one account card with an action that reflects its current connection status.
+    // Inputs: account, active account ID, and whether to show a connection action; output: the completed account row.
+    private HBox createAccountRow (
+        StudentAccount account,
+        String activeAccountId,
+        boolean showConnectionAction
+    ){
         VBox accountDetails = new VBox(4.0);
         Label fullNameLabel = new Label(account.getFullName());
         Label usernameLabel = new Label("@" + account.getUsername());
@@ -232,11 +270,25 @@ public class PeopleBrowserController{
         accountRow.getStyleClass().add("post-card");
         accountRow.getChildren().add(accountDetails);
 
-        if (allowConnection){
-            Button addButton = new Button("Agregar");
-            addButton.getStyleClass().add("button-primary");
-            addButton.setOnAction(event -> handleAddConnection(account));
-            accountRow.getChildren().add(addButton);
+        if (showConnectionAction){
+            boolean isConnected = connectionsService.areConnected(
+                activeAccountId,
+                account.getId()
+            );
+            Button connectionButton = new Button(
+                isConnected ? "Eliminar conexión" : "Agregar"
+            );
+            connectionButton.getStyleClass().add(
+                isConnected ? "button-secondary" : "button-primary"
+            );
+            connectionButton.setOnAction(event ->{
+                if (isConnected){
+                    handleRemoveConnection(account);
+                } else{
+                    handleAddConnection(account);
+                }
+            });
+            accountRow.getChildren().add(connectionButton);
         }
 
         return accountRow;
