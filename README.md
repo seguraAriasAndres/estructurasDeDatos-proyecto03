@@ -1,4 +1,4 @@
-# Social UNA
+# UNA: Plataforma Social
 
 Una red social para la comunidad estudiantil de la Universidad Nacional de Costa Rica. El proyecto permite crear cuentas, encontrar estudiantes, establecer conexiones y compartir publicaciones.
 
